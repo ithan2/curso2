@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Demonstração do Método</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+padding:40px 20px;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+width:400px;
+height:400px;
+background:#00ff8830;
+filter:blur(120px);
+top:-100px;
+right:-100px;
+z-index:-1;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:60px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+color:#00ff88;
+}
+
+.btn{
+background:#00ff88;
+color:#000;
+padding:14px 28px;
+border-radius:12px;
+font-weight:700;
+text-decoration:none;
+display:inline-block;
+transition:0.3s;
+box-shadow:0 0 25px #00ff8850;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+}
+
+.hero{
+text-align:center;
+margin-bottom:70px;
+}
+
+.badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:999px;
+background:#101010;
+border:1px solid #1f1f1f;
+color:#00ff88;
+margin-bottom:25px;
+}
+
+.hero h1{
+font-size:55px;
+line-height:1.1;
+margin-bottom:20px;
+}
+
+.hero p{
+max-width:700px;
+margin:auto;
+color:#9ca3af;
+line-height:1.8;
+font-size:18px;
+}
+
+.modules{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:25px;
+margin-top:50px;
+}
+
+.module{
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(255,255,255,0.06);
+padding:30px;
+border-radius:24px;
+position:relative;
+overflow:hidden;
+transition:0.3s;
+}
+
+.module:hover{
+transform:translateY(-5px);
+border-color:#00ff8850;
+}
+
+.module.free{
+border-color:#00ff8850;
+}
+
+.module.free .status{
+color:#00ff88;
+}
+
+.module.locked::before{
+content:'';
+position:absolute;
+inset:0;
+backdrop-filter:blur(6px);
+background:rgba(0,0,0,0.35);
+}
+
+.module.locked .content{
+opacity:0.4;
+}
+
+.lock{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:50px;
+z-index:2;
+}
+
+.status{
+font-size:14px;
+margin-bottom:15px;
+color:#ff4d4d;
+font-weight:600;
+}
+
+.module h3{
+font-size:24px;
+margin-bottom:15px;
+}
+
+.module p{
+color:#9ca3af;
+line-height:1.7;
+}
+
+.cta{
+margin-top:90px;
+background:linear-gradient(135deg,#00ff88,#00cc6a);
+padding:70px;
+border-radius:35px;
+text-align:center;
+color:#000;
+}
+
+.cta h2{
+font-size:55px;
+margin-bottom:20px;
+}
+
+.cta p{
+font-size:18px;
+margin-bottom:35px;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.price{
+font-size:75px;
+font-weight:800;
+margin-bottom:20px;
+}
+
+.old{
+text-decoration:line-through;
+opacity:0.7;
+font-size:24px;
+margin-bottom:10px;
+}
+
+.buy-btn{
+background:#000;
+color:#fff;
+padding:18px 35px;
+border-radius:14px;
+display:inline-block;
+text-decoration:none;
+font-weight:700;
+transition:0.3s;
+}
+
+.buy-btn:hover{
+transform:scale(1.05);
+}
+
+footer{
+text-align:center;
+margin-top:80px;
+color:#666;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:42px;
+}
+
+.cta h2{
+font-size:40px;
+}
+
+.price{
+font-size:55px;
+}
+
+}
+
+</style>
+</head>
+
+<script>
+
+// Bloquear botão direito
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Bloquear teclas comuns de inspeção
+document.onkeydown = function(e) {
+
+  // F12
+  if (e.keyCode == 123) {
+    return false;
+  }
+
+  // CTRL + SHIFT + I
+  if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+    return false;
+  }
+
+  // CTRL + SHIFT + J
+  if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+    return false;
+  }
+
+  // CTRL + U
+  if (e.ctrlKey && e.keyCode == 85) {
+    return false;
+  }
+
+};
+
+// Detectar DevTools aberto
+setInterval(function() {
+
+  const widthThreshold = window.outerWidth - window.innerWidth > 160;
+  const heightThreshold = window.outerHeight - window.innerHeight > 160;
+
+  if (widthThreshold || heightThreshold) {
+
+    document.body.innerHTML = `
+      <div style="
+      background:#000;
+      color:#00ff88;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:Arial;
+      font-size:30px;
+      ">
+      Acesso bloqueado.
+      </div>
+    `;
+
+  }
+
+}, 1000);
+
+</script>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+
+<div class="logo">
+MÉTODO DIGITAL
+</div>
+
+<a href="SEU_LINK_KIWIFY" class="btn">
+DESBLOQUEAR ACESSO
+</a>
+
+</div>
+
+<section class="hero">
+
+<div class="badge">
+🔥 Demonstração do Método
+</div>
+
+<h1>
+Veja como funciona a estrutura por dentro.
+</h1>
+
+<p>
+Explore uma prévia da plataforma e descubra como o método é organizado para acelerar seus resultados no digital.
+</p>
+
+</section>
+
+<section class="modules">
+
+<div class="module free">
+
+<div class="content">
+
+<div class="status">
+✔ LIBERADO
+</div>
+
+<h3>
+Módulo 1 — Introdução
+</h3>
+
+<p>
+Entenda os fundamentos do mercado digital e como iniciar sua estrutura corretamente.
+</p>
+
+</div>
+
+</div>
+
+<div class="module locked">
+
+<div class="lock">
+🔒
+</div>
+
+<div class="content">
+
+<div class="status">
+ACESSO BLOQUEADO
+</div>
+
+<h3>
+Módulo 2 — Produto Digital
+</h3>
+
+<p>
+Aprenda como estruturar produtos digitais modernos com alta percepção de valor.
+</p>
+
+</div>
+
+</div>
+
+<div class="module locked">
+
+<div class="lock">
+🔒
+</div>
+
+<div class="content">
+
+<div class="status">
+ACESSO BLOQUEADO
+</div>
+
+<h3>
+Módulo 3 — Tráfego Pago
+</h3>
+
+<p>
+Estratégias utilizadas para gerar visitas e vendas utilizando anúncios online.
+</p>
+
+</div>
+
+</div>
+
+<div class="module locked">
+
+<div class="lock">
+🔒
+</div>
+
+<div class="content">
+
+<div class="status">
+ACESSO BLOQUEADO
+</div>
+
+<h3>
+Módulo 4 — Estrutura Premium
+</h3>
+
+<p>
+Landing pages e sistemas que aumentam a conversão e percepção do produto.
+</p>
+
+</div>
+
+</div>
+
+<div class="module locked">
+
+<div class="lock">
+🔒
+</div>
+
+<div class="content">
+
+<div class="status">
+ACESSO BLOQUEADO
+</div>
+
+<h3>
+Módulo 5 — Escala
+</h3>
+
+<p>
+Como transformar pequenas vendas em uma estrutura crescente e sustentável.
+</p>
+
+</div>
+
+</div>
+
+<div class="module locked">
+
+<div class="lock">
+🔒
+</div>
+
+<div class="content">
+
+<div class="status">
+ACESSO BLOQUEADO
+</div>
+
+<h3>
+Módulo 6 — Estratégias Avançadas
+</h3>
+
+<p>
+Métodos para otimizar campanhas, aumentar ROI e melhorar resultados.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="cta">
+
+<div class="old">
+De R$197
+</div>
+
+<div class="price">
+R$97
+</div>
+
+<h2>
+Desbloqueie o acesso completo
+</h2>
+
+<p>
+Acesso imediato a todos os módulos, futuras atualizações e estrutura completa do método.
+</p>
+
+<a href="SEU_LINK_KIWIFY" class="buy-btn">
+QUERO ACESSAR AGORA
+</a>
+
+</section>
+
+<footer>
+© 2026 Método Digital — Todos os direitos reservados.
+</footer>
+
+</div>
+
+</body>
+</html>
