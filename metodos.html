@@ -253,28 +253,6 @@ document.addEventListener('contextmenu', event => event.preventDefault());
 // Bloquear teclas comuns de inspeção
 document.onkeydown = function(e) {
 
-  // F12
-  if (e.keyCode == 123) {
-    return false;
-  }
-
-  // CTRL + SHIFT + I
-  if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
-    return false;
-  }
-
-  // CTRL + SHIFT + J
-  if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
-    return false;
-  }
-
-  // CTRL + U
-  if (e.ctrlKey && e.keyCode == 85) {
-    return false;
-  }
-
-};
-
 // Detectar DevTools aberto
 setInterval(function() {
 
