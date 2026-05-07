@@ -361,9 +361,6 @@ font-size:60px;
 // Bloquear botão direito
 document.addEventListener('contextmenu', event => event.preventDefault());
 
-// Bloquear teclas comuns de inspeção
-document.onkeydown = function(e) {
-
   // F12
   if (e.keyCode == 123) {
     return false;
